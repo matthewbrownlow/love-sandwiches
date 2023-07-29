@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -21,7 +22,7 @@ def get_sales_data(): # This function checks for errors. If there are no errors,
     by commas. The loop will repeatedly request data until it is valid.
     """
     while True: # Asks for the users data that then converts the string of data from the user into a list of values 
-        print("Please enter sales data from th last market.")
+        print("Please enter sales data from the last market.")
         print("Data should be six numbers, seperated by commas.")
         print("Example: 10,20,30,40,50,60\n") # \n Creates a new line in the terminal when the code is exicuted
 
@@ -64,6 +65,30 @@ def update_sales_worksheet(data):
     print("Sales worksheet updated successfully.\n")
 
 
-data = get_sales_data()
-sales_data = [int(num) for num in data] # Converts values into integers; The results from the list comprehension are assigned to the variable sales_data
-update_sales_worksheet(sales_data) # Function called and passed the sales_data list
+def calculate_surplus_data(sales_drow):
+    """
+    Compare sales with stock and calculate the surplus for each item type.
+
+    The surplus is defined as the sales figure subtracted from the stock:
+    - Positive surplus indicates waste
+    - Negative surplus inidcates extra made when stock was sold out
+    """
+    print("Calculating surplus date...\n")
+    stock = SHEET.worksheet("stock").get_all_values() # Using the get_all_values() GSPREAD method to fetch all of the calls from the stock worksheet
+    stock_row = stock[-1] # Fetches the last row of data in the stock worksheet (indexing)
+    print(stock_row)
+
+
+def main():
+    """
+    Run all program functions.
+    Common practise to wrap the main function calls of a program 
+    within a function called 'main'.
+    """
+    data = get_sales_data()
+    sales_data = [int(num) for num in data] # Converts values into integers; The results from the list comprehension are assigned to the variable sales_data
+    update_sales_worksheet(sales_data) # Function called and passed the sales_data list
+    calculate_surplus_data(sales_data)
+
+print("Welcome to Love Sandwiches Data Automation\n")
+main()
