@@ -65,7 +65,7 @@ def update_sales_worksheet(data):
     print("Sales worksheet updated successfully.\n")
 
 
-def calculate_surplus_data(sales_drow):
+def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
 
@@ -75,8 +75,14 @@ def calculate_surplus_data(sales_drow):
     """
     print("Calculating surplus date...\n")
     stock = SHEET.worksheet("stock").get_all_values() # Using the get_all_values() GSPREAD method to fetch all of the calls from the stock worksheet
-    stock_row = stock[-1] # Fetches the last row of data in the stock worksheet (indexing)
-    print(stock_row)
+    stock_row = stock[-1] # Fetches the last row of data in the stock worksheet (indexing[-1])
+    
+    surplus_data = []
+    for stock, sales in zip(stock_row, sales_row):
+        surplus = int(stock) - sales
+        surplus_data.append(surplus)
+        
+    return surplus_data
 
 
 def main():
@@ -88,7 +94,8 @@ def main():
     data = get_sales_data()
     sales_data = [int(num) for num in data] # Converts values into integers; The results from the list comprehension are assigned to the variable sales_data
     update_sales_worksheet(sales_data) # Function called and passed the sales_data list
-    calculate_surplus_data(sales_data)
+    new_surplus_data = calculate_surplus_data(sales_data)
+    print(new_surplus_data)
 
 print("Welcome to Love Sandwiches Data Automation\n")
 main()
