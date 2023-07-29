@@ -65,6 +65,16 @@ def update_sales_worksheet(data):
     print("Sales worksheet updated successfully.\n")
 
 
+def update_suplus_worksheet(data):
+    """
+    Update surplus worksheet, add new row with the list data provided.
+    """
+    print("Updating surplus worksheet...\n")
+    surplus_worksheet = SHEET.worksheet("surplus") 
+    surplus_worksheet.append_row(data)
+    print("Surplus worksheet updated successfully.\n")
+
+
 def calculate_surplus_data(sales_row):
     """
     Compare sales with stock and calculate the surplus for each item type.
@@ -78,10 +88,10 @@ def calculate_surplus_data(sales_row):
     stock_row = stock[-1] # Fetches the last row of data in the stock worksheet (indexing[-1])
     
     surplus_data = []
-    for stock, sales in zip(stock_row, sales_row):
+    for stock, sales in zip(stock_row, sales_row): # The zip() method is used to iterate through two list at the same time
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-        
+
     return surplus_data
 
 
@@ -95,7 +105,7 @@ def main():
     sales_data = [int(num) for num in data] # Converts values into integers; The results from the list comprehension are assigned to the variable sales_data
     update_sales_worksheet(sales_data) # Function called and passed the sales_data list
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
+    update_suplus_worksheet(new_surplus_data)
 
 print("Welcome to Love Sandwiches Data Automation\n")
 main()
