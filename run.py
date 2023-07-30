@@ -55,24 +55,35 @@ def validate_data(values):
     return True
 
 
-def update_sales_worksheet(data):
-    """
-    Update sales worksheet, add new row with the list data provided.
-    """
-    print("Updating sales worksheet...\n")
-    sales_worksheet = SHEET.worksheet("sales") # Using the SHEET variable to use the GSPEAD library; Using the GSPEAD worksheet() method to access the sales worksheet
-    sales_worksheet.append_row(data) # The .append_row() method adds a new row to the end of our data in the worksheet selected
-    print("Sales worksheet updated successfully.\n")
+# def update_sales_worksheet(data):
+#     """
+#     Update sales worksheet, add new row with the list data provided.
+#     """
+#     print("Updating sales worksheet...\n")
+#     sales_worksheet = SHEET.worksheet("sales") # Using the SHEET variable to use the GSPEAD library; Using the GSPEAD worksheet() method to access the sales worksheet
+#     sales_worksheet.append_row(data) # The .append_row() method adds a new row to the end of our data in the worksheet selected
+#     print("Sales worksheet updated successfully.\n")
 
 
-def update_suplus_worksheet(data):
+def update_worksheet(data, worksheet):
     """
-    Update surplus worksheet, add new row with the list data provided.
+    Receives a list of integers to be inserted into the worksheet.
+    Update the relevant worksheet with the data provided.
     """
-    print("Updating surplus worksheet...\n")
-    surplus_worksheet = SHEET.worksheet("surplus") 
-    surplus_worksheet.append_row(data)
-    print("Surplus worksheet updated successfully.\n")
+    print(f"Updating {worksheet} worksheet...\n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(data)
+    print(f"{worksheet} worksheet updated successfully.\n")
+
+
+# def update_suplus_worksheet(data):
+#     """
+#     Update surplus worksheet, add new row with the list data provided.
+#     """
+#     print("Updating surplus worksheet...\n")
+#     surplus_worksheet = SHEET.worksheet("surplus") 
+#     surplus_worksheet.append_row(data)
+#     print("Surplus worksheet updated successfully.\n")
 
 
 def calculate_surplus_data(sales_row):
@@ -103,9 +114,9 @@ def main():
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data] # Converts values into integers; The results from the list comprehension are assigned to the variable sales_data
-    update_sales_worksheet(sales_data) # Function called and passed the sales_data list
+    update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
-    update_suplus_worksheet(new_surplus_data)
+    update_worksheet(new_surplus_data, "surplus")
 
 print("Welcome to Love Sandwiches Data Automation\n")
 main()
